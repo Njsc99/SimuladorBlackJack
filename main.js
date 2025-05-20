@@ -1,5 +1,5 @@
-let jugador;
-let puntaje;
+let jugador = "";
+let puntaje = 0;
 let puntajeCrupier = 0;
 let cartas;
 let carta;
@@ -22,102 +22,37 @@ function ObtenerValor(carta) {
     }  
 }
 
-function comenzarJuego() {
-  jugador = prompt("Bienvenido al juego de BlackJack, ¿cuál es tu nombre?");
-  alert(jugador + ", Vamos a comenzar el juego de BlackJack");
-  alert("Recibirás 2 cartas, y el objetivo es sumar 21 puntos o lo más cercano a 21 sin pasarse.");
-  alert("Las cartas son: " + cartasPorJugador.join(", "));
-  for (let i = 0; i < 2; i++) {
-    let carta = generarCarta();
-    cartasJugador.push(carta);
-    alert("Tu carta N°" +(i+1) +" "+ "es: " + carta);
-  }
-  if (cartasJugador.includes("A")) {
-    ObtenerValor("A");
-    let respuesta = prompt("El valor de tu carta es: " + A1 + " o " + A2 + ", la carta A puede valer 1 o 11, ¿cual prefieres?."+ "\n" + "Escribe 1 o 11");
-    while (respuesta != A1 && respuesta != A2) {
-      respuesta = prompt("Respuesta no válida, el A vale 1 o 11, ¿cual prefieres?");
-    }
-    if (respuesta == A1) {
-      console.log("El valor de tu carta A es: " + A1);
-      if (cartasJugador[0] != "A") {
-        puntaje = ObtenerValor(cartasJugador[0]) + A1;
-        alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
-      } else {
-        puntaje = ObtenerValor(cartasJugador[1]) + A1;
-        alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
-      }
-    } else if (respuesta == A2) {
-        console.log("El valor de tu carta A es: " + A2);
-        if (cartasJugador[0] != "A") {
-          puntaje = ObtenerValor(cartasJugador[0]) + A2;
-          alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
-        } else {
-          puntaje = ObtenerValor(cartasJugador[1]) + A2;
-          alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
-        }
-    } else {
-        console.log("No se ha seleccionado un valor válido para el A");
-    }
-  } else {
-    puntaje = ObtenerValor(cartasJugador[0]) + ObtenerValor(cartasJugador[1]);
-    alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
-  }
-}
+function actualizarEstado() {
+  // Mostrar las cartas del jugador
+  document.getElementById("player-cards").textContent = `Tus cartas: ${cartasJugador.join(", ")}`;
+  
+  // Calcular el puntaje del jugador
+  puntaje = cartasJugador.reduce((total, carta) => {
+      const valor = ObtenerValor(carta);
+      return total + (Array.isArray(valor) ? valor[0] : valor); // Usar el valor más bajo para el As
+  }, 0);
 
-function turnoJugador() {
-  let respuesta = prompt("Deseas pedir otra carta o decides plantarte?"+ "\n" + "1. Pedir Carta"+ "\n" + "2. Plantarse");
-  while (respuesta != 1 && respuesta != 2) {
-    respuesta = prompt("Respuesta no válida, ¿deseas pedir otra carta o decides plantarte? /n 1. Pedir Carta /n 2. Plantarse");
-  }
-  if (respuesta == 1) {
-    carta = generarCarta();
-    cartasJugador.push(carta);
-    console.log("Tu carta N°" + (cartasJugador.length) + " es: " + carta);
-    if (carta == "A") {
-      ObtenerValor("A");
-      console.log("El valor de tu carta es: " + A1 + " o " + A2); 
-      console.log("el A puede valer 1 o 11, ¿cual prefieres?");
-      let respuesta = prompt("Escribe 1 o 11");
-      while (respuesta != A1 && respuesta != A2) {
-        respuesta = prompt("Respuesta no válida, el A vale 1 o 11, ¿cual prefieres?");
-      }
-      if (respuesta == A1) {
-        console.log("El valor de tu carta A es: " + A1);
-        puntaje += A1;
-        alert("Tu carta N°" + (cartasJugador.length) + " es: " + carta + "\n" + "Tu puntaje es: " + puntaje);
-      } else if (respuesta == A2) {
-          console.log("El valor de tu carta A es: " + A2);
-          puntaje += A2;
-          alert("Tu carta N°" + (cartasJugador.length) + " es: " + carta + "\n" + "Tu puntaje es: " + puntaje);
-      } else {
-          alert("No se ha seleccionado un valor válido para el A");
-      }
-    } else {
-        puntaje += ObtenerValor(carta);
-        alert("Tu carta N°" + (cartasJugador.length) + " es: " + carta + "\n" + "Tu puntaje es: " + puntaje);
-    }
-
-    if (puntaje > 21) {
-      alert("Te has pasado de 21, has perdido!");
-    } else if (puntaje == 21) {
-      alert("Felicidades, has ganado!");
-    } else {
-      turnoJugador();
-    }
-  } else {
-    turnoCrupier();
-
-  }
+  // Mostrar el puntaje del jugador
+  document.getElementById("player-score").textContent = `Tu puntaje: ${puntaje}`;
 }
 
 function turnoCrupier() {
 
   let cartasCrupier = [];
+
+
+  const dealerInfoElement = document.getElementById("dealer-info");
+  dealerInfoElement.style.display = "block";
+
+  const dealerCardsElement = document.getElementById("dealer-cards");
+  const dealerScoreElement = document.getElementById("dealer-score");
+  dealerCardsElement.textContent = "Cartas del crupier: ";
+  dealerScoreElement.textContent = "Puntaje del crupier: ";
+
   while (puntajeCrupier < 17) {
     let carta = generarCarta();
     cartasCrupier.push(carta);
-    alert("La carta N° "+ cartasCrupier.length + " del crupier es: " + carta);
+     dealerCardsElement.textContent = `Cartas del crupier: ${cartasCrupier.join(", ")}`;
     if (carta == "A") {
       ObtenerValor("A");
       if (puntajeCrupier + A2 <= 21) {
@@ -129,27 +64,107 @@ function turnoCrupier() {
     }
     else {
       puntajeCrupier += ObtenerValor(carta);
-    }      
+    }   
+    dealerScoreElement.textContent = `Puntaje del crupier: ${puntajeCrupier}`;   
   }
-  alert("El puntaje del crupier es: " + puntajeCrupier);
+  document.getElementById("instructions").textContent = `El puntaje final del crupier es: ${puntajeCrupier}`;
 }
 
-function evaluarGanador() {
+document.getElementById("start-game").addEventListener("click", () => {
+  const playerNameInput = document.getElementById("player-name");
+  jugador = playerNameInput.value.trim();
+
+  if (jugador === "") {
+      alert("Por favor, ingresa tu nombre.");
+      return;
+  }
+
+  document.getElementById("player-info").style.display = "none";
+  document.getElementById("game-info").style.display = "block";
+
+  document.getElementById("instructions").textContent = 
+      `${jugador}, recibirás 2 cartas. El objetivo es sumar 21 puntos o lo más cercano a 21 sin pasarte.`;
+
+  // Repartir las primeras dos cartas
+  for (let i = 0; i < 2; i++) {
+      const carta = generarCarta();
+      cartasJugador.push(carta);
+  }
+
+  actualizarEstado();
+});
+
+document.getElementById("draw-card").addEventListener("click", () => {
+  const carta = generarCarta();
+  cartasJugador.push(carta);
+  actualizarEstado();
+
   if (puntaje > 21) {
-    alert("Te has pasado de 21, has perdido!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
-  } else if (puntaje == 21) {
-    alert("Felicidades, has ganado!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
-  } else if (puntaje > puntajeCrupier && puntaje <= 21) {
-    alert("Felicidades, has ganado!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
-  } else if (puntaje < puntajeCrupier && puntajeCrupier <= 21) {
-    alert("Lo siento, has perdido!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
-  } else if (puntaje < puntajeCrupier && puntajeCrupier > 21) {
-    alert("Felicidades, has ganado!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
-  } else if (puntaje == puntajeCrupier) {
-    alert("Es un empate!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
+      document.getElementById("instructions").textContent = "Te has pasado de 21, ¡has perdido!";
+      finalizarJuego();
+  } else if (puntaje === 21) {
+      document.getElementById("instructions").textContent = "¡Felicidades, has ganado!";
+      finalizarJuego();
   }
+});
+
+document.getElementById("stand").addEventListener("click", () => {
+  document.getElementById("instructions").textContent = "Te has plantado. Turno del crupier.";
+  finalizarJuego();
+});
+
+document.getElementById("restart-game").addEventListener("click", reiniciarJuego);
+
+function finalizarJuego() {
+  document.getElementById("draw-card").disabled = true;
+  document.getElementById("stand").disabled = true;
+
+  // Llamar al turno del crupier
+  turnoCrupier();
+
+  // Aquí puedes agregar lógica para determinar el ganador
+  if (puntaje > 21) {
+    document.getElementById("instructions").textContent = "Te has pasado de 21, ¡has perdido!";
+  } else if (puntaje == 21) {
+    document.getElementById("instructions").textContent = "¡Felicidades, has ganado!";
+  } else if (puntaje > puntajeCrupier && puntaje <= 21) {
+    document.getElementById("instructions").textContent = "¡Felicidades, has ganado!";
+  } else if (puntaje < puntajeCrupier && puntajeCrupier <= 21) {
+    document.getElementById("instructions").textContent = "Lo siento, has perdido.";
+  } else if (puntaje < puntajeCrupier && puntajeCrupier > 21) {
+    document.getElementById("instructions").textContent = "¡Felicidades, has ganado!";
+  } else if (puntaje == puntajeCrupier) {
+    document.getElementById("instructions").textContent = "Es un empate.";
+  }
+  document.getElementById("restart-game").style.display = "block";
 }
 
-comenzarJuego();
-turnoJugador();
-evaluarGanador();
+function reiniciarJuego() {
+  // Reiniciar variables globales
+  jugador = "";
+  puntaje = 0;
+  puntajeCrupier = 0;
+  cartasJugador.length = 0;
+
+  // Ocultar las secciones del juego
+  document.getElementById("game-info").style.display = "none";
+  document.getElementById("dealer-info").style.display = "none";
+
+  // Limpiar los elementos del DOM
+  document.getElementById("player-cards").textContent = "";
+  document.getElementById("player-score").textContent = "";
+  document.getElementById("dealer-cards").textContent = "";
+  document.getElementById("dealer-score").textContent = "";
+  document.getElementById("instructions").textContent = "";
+
+  // Volver a mostrar la pantalla inicial
+  document.getElementById("player-info").style.display = "block";
+
+  // Ocultar el botón de reinicio
+  document.getElementById("restart-game").style.display = "none";
+
+  // Habilitar los botones de juego
+  document.getElementById("draw-card").disabled = false;
+  document.getElementById("stand").disabled = false;
+}
+

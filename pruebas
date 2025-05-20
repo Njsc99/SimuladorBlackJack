@@ -1,0 +1,138 @@
+function actualizarEstado() {
+  const valores = cartasJugador.map(carta => ObtenerValor(carta));
+  puntaje = valores.flat().reduce((acc, val) => acc + (Array.isArray(val) ? val[0] : val), 0);
+
+  document.getElementById("player-cards").textContent = `Tus cartas: ${cartasJugador.join(", ")}`;
+  document.getElementById("player-score").textContent = `Tu puntaje: ${puntaje}`;
+}
+function comenzarJuego() {
+  jugador = prompt("Bienvenido al juego de BlackJack, ¿cuál es tu nombre?");
+  alert(jugador + ", Vamos a comenzar el juego de BlackJack");
+  alert("Recibirás 2 cartas, y el objetivo es sumar 21 puntos o lo más cercano a 21 sin pasarse.");
+  alert("Las cartas son: " + cartasPorJugador.join(", "));
+  for (let i = 0; i < 2; i++) {
+    let carta = generarCarta();
+    cartasJugador.push(carta);
+    alert("Tu carta N°" +(i+1) +" "+ "es: " + carta);
+  }
+  if (cartasJugador.includes("A")) {
+    ObtenerValor("A");
+    let respuesta = prompt("El valor de tu carta es: " + A1 + " o " + A2 + ", la carta A puede valer 1 o 11, ¿cual prefieres?."+ "\n" + "Escribe 1 o 11");
+    while (respuesta != A1 && respuesta != A2) {
+      respuesta = prompt("Respuesta no válida, el A vale 1 o 11, ¿cual prefieres?");
+    }
+    if (respuesta == A1) {
+      console.log("El valor de tu carta A es: " + A1);
+      if (cartasJugador[0] != "A") {
+        puntaje = ObtenerValor(cartasJugador[0]) + A1;
+        alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
+      } else {
+        puntaje = ObtenerValor(cartasJugador[1]) + A1;
+        alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
+      }
+    } else if (respuesta == A2) {
+        console.log("El valor de tu carta A es: " + A2);
+        if (cartasJugador[0] != "A") {
+          puntaje = ObtenerValor(cartasJugador[0]) + A2;
+          alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
+        } else {
+          puntaje = ObtenerValor(cartasJugador[1]) + A2;
+          alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
+        }
+    } else {
+        console.log("No se ha seleccionado un valor válido para el A");
+    }
+  } else {
+    puntaje = ObtenerValor(cartasJugador[0]) + ObtenerValor(cartasJugador[1]);
+    alert("Tu carta N°1 es:"+ cartasJugador[0] + "\n" + "Tu carta N°2 es:"+ cartasJugador[1] + "\n" + "Tu puntaje es: " + puntaje);
+  }
+}
+
+function turnoJugador() {
+  let respuesta = prompt("Deseas pedir otra carta o decides plantarte?"+ "\n" + "1. Pedir Carta"+ "\n" + "2. Plantarse");
+  while (respuesta != 1 && respuesta != 2) {
+    respuesta = prompt("Respuesta no válida, ¿deseas pedir otra carta o decides plantarte? /n 1. Pedir Carta /n 2. Plantarse");
+  }
+  if (respuesta == 1) {
+    carta = generarCarta();
+    cartasJugador.push(carta);
+    console.log("Tu carta N°" + (cartasJugador.length) + " es: " + carta);
+    if (carta == "A") {
+      ObtenerValor("A");
+      console.log("El valor de tu carta es: " + A1 + " o " + A2); 
+      console.log("el A puede valer 1 o 11, ¿cual prefieres?");
+      let respuesta = prompt("Escribe 1 o 11");
+      while (respuesta != A1 && respuesta != A2) {
+        respuesta = prompt("Respuesta no válida, el A vale 1 o 11, ¿cual prefieres?");
+      }
+      if (respuesta == A1) {
+        console.log("El valor de tu carta A es: " + A1);
+        puntaje += A1;
+        alert("Tu carta N°" + (cartasJugador.length) + " es: " + carta + "\n" + "Tu puntaje es: " + puntaje);
+      } else if (respuesta == A2) {
+          console.log("El valor de tu carta A es: " + A2);
+          puntaje += A2;
+          alert("Tu carta N°" + (cartasJugador.length) + " es: " + carta + "\n" + "Tu puntaje es: " + puntaje);
+      } else {
+          alert("No se ha seleccionado un valor válido para el A");
+      }
+    } else {
+        puntaje += ObtenerValor(carta);
+        alert("Tu carta N°" + (cartasJugador.length) + " es: " + carta + "\n" + "Tu puntaje es: " + puntaje);
+    }
+
+    if (puntaje > 21) {
+      alert("Te has pasado de 21, has perdido!");
+    } else if (puntaje == 21) {
+      alert("Felicidades, has ganado!");
+    } else {
+      turnoJugador();
+    }
+  } else {
+    turnoCrupier();
+
+  }
+}
+
+function turnoCrupier() {
+
+  let cartasCrupier = [];
+  while (puntajeCrupier < 17) {
+    let carta = generarCarta();
+    cartasCrupier.push(carta);
+    alert("La carta N° "+ cartasCrupier.length + " del crupier es: " + carta);
+    if (carta == "A") {
+      ObtenerValor("A");
+      if (puntajeCrupier + A2 <= 21) {
+        puntajeCrupier += A2;
+      }
+      else {
+        puntajeCrupier += A1;
+      }
+    }
+    else {
+      puntajeCrupier += ObtenerValor(carta);
+    }      
+  }
+  alert("El puntaje del crupier es: " + puntajeCrupier);
+}
+
+function evaluarGanador() {
+  if (puntaje > 21) {
+    alert("Te has pasado de 21, has perdido!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
+  } else if (puntaje == 21) {
+    alert("Felicidades, has ganado!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
+  } else if (puntaje > puntajeCrupier && puntaje <= 21) {
+    alert("Felicidades, has ganado!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
+  } else if (puntaje < puntajeCrupier && puntajeCrupier <= 21) {
+    alert("Lo siento, has perdido!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
+  } else if (puntaje < puntajeCrupier && puntajeCrupier > 21) {
+    alert("Felicidades, has ganado!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
+  } else if (puntaje == puntajeCrupier) {
+    alert("Es un empate!" + "\n" + "El puntaje del crupier es: " + puntajeCrupier + "\n" + "Tu puntaje es: " + puntaje);
+  }
+}
+
+comenzarJuego();
+turnoJugador();
+evaluarGanador();
