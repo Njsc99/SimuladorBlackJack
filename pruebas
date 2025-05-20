@@ -2,8 +2,8 @@ function actualizarEstado() {
   const valores = cartasJugador.map(carta => ObtenerValor(carta));
   puntaje = valores.flat().reduce((acc, val) => acc + (Array.isArray(val) ? val[0] : val), 0);
 
-  document.getElementById("player-cards").textContent = `Tus cartas: ${cartasJugador.join(", ")}`;
-  document.getElementById("player-score").textContent = `Tu puntaje: ${puntaje}`;
+  document.getElementById("cartas-jugador").textContent = `Tus cartas: ${cartasJugador.join(", ")}`;
+  document.getElementById("puntaje-jugador").textContent = `Tu puntaje: ${puntaje}`;
 }
 function comenzarJuego() {
   jugador = prompt("Bienvenido al juego de BlackJack, ¿cuál es tu nombre?");

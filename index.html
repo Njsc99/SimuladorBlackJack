@@ -8,25 +8,50 @@
 </head>
 <body>
     <h1>Bienvenido al juego de BlackJack</h1>
-    <div id="game">
-        <div id="player-info">
-            <label for="player-name">Ingresa tu nombre:</label>
-            <input type="text" id="player-name" placeholder="Tu nombre">
-            <button id="start-game">Comenzar Juego</button>
+    <div id="juego">
+        <div id="jugador-info">
+            <label for="nombre-jugador">Ingresa tu nombre:</label>
+            <input type="text" id="nombre-jugador" placeholder="Tu nombre">
+            <button id="comenzar-juego">Comenzar Juego</button>
         </div>
-        <div id="dealer-info" style="display: none;">
+        <div id="crupier-info" style="display: none;">
             <h2>Turno del Crupier</h2>
-            <p id="dealer-cards"></p>
-            <p id="dealer-score"></p>
+            <p id="cartas-crupier"></p>
+            <p id="puntaje-crupier"></p>
         </div>
-        <div id="game-info" style="display: none;">
-            <p id="instructions"></p>
-            <button id="draw-card">Pedir Carta</button>
-            <button id="stand">Plantarse</button>
-            <button id="restart-game" style="display: none;">Reiniciar Juego</button>
-            <p id="player-cards"></p>
-            <p id="player-score"></p>
+        <div id="juego-info" style="display: none;">
+            <p id="instrucciones"></p>
+            <h2 id="turno-jugador">Turno de Jugador</h2>
+            <p id="cartas-jugador"></p>
+            <p id="puntaje-jugador"></p>
+            <div id="opciones-as" style="display: none;">
+                <p>El As puede valer 1 o 11. ¿Cuál prefieres?</p>
+                <button id="as-1">1</button>
+                <button id="as-11">11</button>
+              </div>
+            <div class="grupo-botones">
+                <button id="robar-carta">Pedir Carta</button>
+                <button id="plantarse">Plantarse</button>
+                <button id="reiniciar-juego" style="display: none;">Reiniciar Juego</button>
+                <button id="ver-historial">Ver Historial</button>
+            </div>
         </div>
+
+        <div id="historial" style="display: none;">
+            <h2>Historial de Partidas</h2>
+            <table border="1">
+              <thead>
+                <tr>
+                  <th>Jugador</th>
+                  <th>Puntaje Jugador</th>
+                  <th>Puntaje Crupier</th>
+                  <th>Resultado</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="historial-body"></tbody>
+            </table>
+          </div>
     </div>
 
 
