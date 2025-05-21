@@ -13,6 +13,26 @@
             <label for="nombre-jugador">Ingresa tu nombre:</label>
             <input type="text" id="nombre-jugador" placeholder="Tu nombre">
             <button id="comenzar-juego">Comenzar Juego</button>
+
+            <h2>Instrucciones</h2>
+                     
+            <ul>
+                <li>Cada jugador recibe dos cartas al inicio.</li>
+                <li>Las cartas del 2 al 10 tienen su valor nominal.</li>
+                <li>Las cartas J, Q y K valen 10 puntos.</li>
+                <li>El As puede valer 1 o 11 puntos, según lo que prefiera el jugador.</li>
+                <li>El objetivo es acercarse lo más posible a 21 puntos sin pasarse.</li>
+                <li>El jugador juega primero y puede pedir
+                cartas o plantarse.</li>
+                <li>Si el jugador se pasa de 21, pierde automáticamente.</li>
+                <li>Después del turno del jugador, el crupier juega.</li>
+                <li>El crupier debe pedir cartas hasta alcanzar al menos 17 puntos.</li>
+                <li>Si el crupier se pasa de 21, el jugador gana.</li>
+                <li>Si el jugador tiene más puntos que el crupier, ganas.</li>
+                <li>Si el crupier tiene más puntos que el jugador, pierdes.</li>
+                <li>Si ambos tienen la misma cantidad de puntos, es un empate.</li>
+                <li>El historial de partidas se guarda y se puede ver al final de la ronda</li>
+            </ul>
         </div>
         <div id="crupier-info" style="display: none;">
             <h2>Turno del Crupier</h2>
@@ -32,6 +52,7 @@
             <div class="grupo-botones">
                 <button id="robar-carta">Pedir Carta</button>
                 <button id="plantarse">Plantarse</button>
+                <button id="continuar" style="display: none;">Continuar</button>
                 <button id="reiniciar-juego" style="display: none;">Reiniciar Juego</button>
                 <button id="ver-historial">Ver Historial</button>
             </div>
